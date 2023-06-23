@@ -4,12 +4,17 @@
   "description": "Mongoose ORM and Nodejs backend app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node index.js",
+    "develop":"nodemon index.js"
   },
   "author": "Roger Medellin",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
     "mongoose": "^7.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
