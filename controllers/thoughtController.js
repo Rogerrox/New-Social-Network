@@ -29,7 +29,7 @@ module.exports = {
   async getThoughts(req, res) {
     try {
       const thoughts = await Thought.find();
-      res.json(thought);
+      res.json(thoughts);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -86,7 +86,7 @@ module.exports = {
         return res.status(404).json({ message: 'No such thought exists' });
       }
 
-      const User = await User.findOneAndUpdate(
+      const User = await user.findOneAndUpdate(
         { thoughts: req.params.UserId },
         { $pull: { thoughts: req.params.thoughtId } },
         { new: true }
