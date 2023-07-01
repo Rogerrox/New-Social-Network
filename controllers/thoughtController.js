@@ -1,5 +1,5 @@
-const { ObjectId } = require('mongoose').Types;
-const { Thought, Course } = require('../models');
+//const { ObjectId } = require('mongoose').Types;
+const { User, Thought } = require('../models');
 
 // Aggregate function to get the number of thoughts overall
 const headCount = async () => {
@@ -29,35 +29,25 @@ module.exports = {
   async getThoughts(req, res) {
     try {
       const thoughts = await Thought.find();
-
-      const thoughtObj = {
-        thoughts,
-        headCount: await headCount(),
-      };
-
-      res.json(thoughtObj);
+      res.json(users);
     } catch (err) {
-      console.log(err);
-      return res.status(500).json(err);
+      res.status(500).json(err);
     }
   },
+
   // Get a single thought
   async getSingleThought(req, res) {
     try {
-      const thought = await Thought.findOne({ _id: req.params.thoughtId })
+      const thought = await Thought.findOne({ _id: req.params.Id })
         .select('-__v');
 
       if (!thought) {
-        return res.status(404).json({ message: 'No thought with that ID' })
+        return res.status(404).json({ message: 'No thought with that ID' });
       }
 
-      res.json({
-        thought,
-        grade: await grade(req.params.thoughtId),
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json(err);
+      res.json(thought);
+    } catch(err){
+         res.status(500).json(err);
     }
   },
   // create a new thought
@@ -66,10 +56,28 @@ module.exports = {
       const thought = await Thought.create(req.body);
       res.json(thought);
     } catch (err) {
-      res.status(500).json(err);
+      console.log(err);
+      return res.status(500).json(err);
     }
   },
-  // Delete a thought and remove them from the course
+ //update a thought
+ async updateThought(req, res) {
+  try{
+    const user = await Thought.findOneAndUpdate(
+    { _id: req.params.thoughtId },
+    { $set: req.body },
+    { runValidators: true, new: true }
+  );
+    if (!user){ 
+              res.status(404).json({ message: "No thought found with this ID!" });
+    }
+    res.json(user);
+      } catch(err){
+        res.status(500).json(err);
+      }
+ },
+
+  // Delete a thought 
   async deleteThought(req, res) {
     try {
       const thought = await Thought.findOneAndRemove({ _id: req.params.thoughtId });

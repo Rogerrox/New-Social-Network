@@ -13,7 +13,7 @@ module.exports = {
   // Get a user
   async getSingleUser(req, res) {
     try {
-      const user = await User.findOne({ _id: req.params.userId })
+      const user = await User.findOne({ _id: req.params.id })
         .select('-__v');
 
       if (!user) {
@@ -38,7 +38,7 @@ module.exports = {
   // Delete a user
   async deleteUser(req, res) {
     try {
-      const user = await User.findOneAndDelete({ _id: req.params.userId });
+      const user = await User.findOneAndDelete({ _id: req.params.id });
 
       if (!user) {
         res.status(404).json({ message: 'No user with that ID' });
@@ -54,7 +54,7 @@ module.exports = {
   async updateUser(req, res) {
     try {
       const user = await User.findOneAndUpdate(
-        { _id: req.params.userId },
+        { _id: req.params.id },
         { $set: req.body },
         { runValidators: true, new: true }
       );
@@ -62,7 +62,6 @@ module.exports = {
       if (!user) {
         res.status(404).json({ message: 'No user with this id!' });
       }
-
       res.json(user);
     } catch (err) {
       res.status(500).json(err);
