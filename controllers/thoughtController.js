@@ -29,7 +29,7 @@ module.exports = {
   async getThoughts(req, res) {
     try {
       const thoughts = await Thought.find();
-      res.json(users);
+      res.json(thought);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -63,15 +63,15 @@ module.exports = {
  //update a thought
  async updateThought(req, res) {
   try{
-    const user = await Thought.findOneAndUpdate(
+    const thought = await Thought.findOneAndUpdate(
     { _id: req.params.thoughtId },
     { $set: req.body },
     { runValidators: true, new: true }
   );
-    if (!user){ 
+    if (!thought){ 
               res.status(404).json({ message: "No thought found with this ID!" });
     }
-    res.json(user);
+    res.json(thought);
       } catch(err){
         res.status(500).json(err);
       }
@@ -86,15 +86,15 @@ module.exports = {
         return res.status(404).json({ message: 'No such thought exists' });
       }
 
-      const course = await Course.findOneAndUpdate(
-        { thoughts: req.params.thoughtId },
+      const User = await User.findOneAndUpdate(
+        { thoughts: req.params.UserId },
         { $pull: { thoughts: req.params.thoughtId } },
         { new: true }
       );
 
-      if (!course) {
+      if (!user) {
         return res.status(404).json({
-          message: 'Thought deleted, but no courses found',
+          message: 'Thought deleted, but no user found',
         });
       }
 
